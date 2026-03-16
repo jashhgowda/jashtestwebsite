@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logged Out — Jashwanth's Test Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#0a0a0a;--card:#141414;--border:#222;--accent:#c8f542;--accent-dim:#9ec42e;--text:#f0ede6;--muted:#555;--radius:14px;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+    body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(140px);opacity:0.08;pointer-events:none;z-index:0;}
+    body::before{width:500px;height:500px;background:#4287f5;top:-150px;left:-100px;}
+    body::after{width:400px;height:400px;background:var(--accent);bottom:-100px;right:-100px;}
+    .card{position:relative;z-index:1;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:52px 48px;width:min(420px,92vw);text-align:center;box-shadow:0 40px 80px rgba(0,0,0,0.5);animation:fadeUp 0.6s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .icon-wrap{width:70px;height:70px;border-radius:50%;background:#1a1a1a;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:2rem;}
+    .title{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:10px;}
+    .subtitle{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:32px;}
+    .subtitle span{color:var(--text);}
+    .countdown-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:28px;}
+    .ring-label{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+    .ring{position:relative;width:76px;height:76px;}
+    .ring svg{transform:rotate(-90deg);}
+    .ring-bg{fill:none;stroke:var(--border);stroke-width:4;}
+    .ring-fill{fill:none;stroke:var(--accent);stroke-width:4;stroke-linecap:round;stroke-dasharray:213;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear;}
+    .ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--accent);}
+    .btn-login{display:block;width:100%;background:var(--accent);color:#0d0d0d;border:none;border-radius:8px;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+    .btn-login:hover{background:var(--accent-dim);}
+    .divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:12px;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+    .session-info{background:#111;border:1px solid var(--border);border-radius:10px;padding:14px 18px;text-align:left;}
+    .session-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;}
+    .session-row span:first-child{color:var(--muted);}
+    .session-row span:last-child{color:var(--text);}
+    .page-credit{position:fixed;bottom:14px;right:18px;font-size:11px;color:#2a2a2a;z-index:10;}.page-credit span{color:var(--accent);}
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="icon-wrap">👋</div>
+  <h1 class="title">You're logged out</h1>
+  <p class="subtitle">Your session has ended. Redirecting in <span id="subCount">5</span> seconds.</p>
+  <div class="countdown-wrap">
+    <div class="ring-label">Redirecting in</div>
+    <div class="ring">
+      <svg viewBox="0 0 76 76" width="76" height="76">
+        <circle class="ring-bg" cx="38" cy="38" r="34"/>
+        <circle class="ring-fill" id="ringFill" cx="38" cy="38" r="34"/>
+      </svg>
+      <div class="ring-num" id="ringNum">5</div>
+    </div>
+  </div>
+  <a href="index.html" class="btn-login">Sign in again →</a>
+  <div class="divider">session summary</div>
+  <div class="session-info">
+    <div class="session-row"><span>Logged in as</span><span id="sessionUser">—</span></div>
+    <div class="session-row"><span>Session ended</span><span id="sessionTime">—</span></div>
+    <div class="session-row"><span>Reason</span><span id="sessionReason">Manual logout</span></div>
+  </div>
+</div>
+<div class="page-credit">Built by <span>Jashwanth</span></div>
+<script>
+  document.getElementById('sessionReason').textContent = sessionStorage.getItem('logoutReason') || 'Manual logout';
+  document.getElementById('sessionUser').textContent   = sessionStorage.getItem('lastUser') || '—';
+  document.getElementById('sessionTime').textContent   = new Date().toLocaleTimeString();
+  sessionStorage.clear();
+  const circ = 2 * Math.PI * 34;
+  const ring = document.getElementById('ringFill');
+  ring.style.strokeDasharray  = circ;
+  ring.style.strokeDashoffset = 0;
+  let t = 5;
+  const tick = setInterval(() => {
+    t--;
+    document.getElementById('ringNum').textContent  = t;
+    document.getElementById('subCount').textContent = t;
+    ring.style.strokeDashoffset = circ * (1 - t / 5);
+    if (t <= 0) { clearInterval(tick); window.location.href = 'index.html'; }
+  }, 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products — Jashwanth's Test Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#0a0a0a;--card:#161616;--border:#222;--accent:#c8f542;--accent-dim:#9ec42e;--text:#f0ede6;--muted:#555;--radius:14px;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;}
+    .nav-logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--accent);text-decoration:none;}
+    .nav-links{display:flex;gap:28px;}.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}.nav-links a:hover,.nav-links a.active{color:var(--text);}
+    .cart-btn{background:var(--accent);color:#0d0d0d;border:none;border-radius:8px;padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:background 0.2s;}.cart-btn:hover{background:var(--accent-dim);}
+    .page-header{padding:48px 40px 28px;animation:fadeUp 0.5s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+    .page-tag{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:12px;}
+    .page-title{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);margin-bottom:8px;}
+    .page-sub{font-size:14px;color:var(--muted);}
+    .toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0 40px 24px;}
+    .search-wrap{position:relative;flex:1;min-width:200px;}
+    .search-wrap input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 14px 10px 36px;outline:none;transition:border-color 0.2s;}
+    .search-wrap input:focus{border-color:var(--accent);}
+    .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;}
+    select{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:pointer;}
+    .filter-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:10px 16px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;}
+    .filter-btn.active,.filter-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;padding:0 40px 60px;}
+    .product-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color 0.2s,transform 0.2s;cursor:pointer;}
+    .product-card:hover{border-color:#333;transform:translateY(-4px);}
+    .product-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;background:#111;border-bottom:1px solid var(--border);}
+    .product-body{padding:18px;}
+    .product-category{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+    .product-name{font-size:15px;font-weight:500;margin-bottom:6px;}
+    .product-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px;}
+    .product-footer{display:flex;align-items:center;justify-content:space-between;}
+    .product-price{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--accent);}
+    .add-btn{background:var(--accent);color:#0d0d0d;border:none;border-radius:6px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.2s,transform 0.1s;}
+    .add-btn:hover{background:var(--accent-dim);}
+    .add-btn:active{transform:scale(0.95);}
+    .add-btn.added{background:#1c1c1c;color:var(--accent);border:1px solid var(--accent);}
+    .no-results{grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-size:14px;}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e1e;border:1px solid var(--border);border-radius:10px;padding:13px 24px;font-size:13px;opacity:0;transition:opacity 0.3s,transform 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .toast.success{border-color:var(--accent);color:var(--accent);}
+    .page-credit{position:fixed;bottom:14px;right:18px;font-size:11px;color:#2a2a2a;z-index:10;}.page-credit span{color:var(--accent);}
+    @media(max-width:640px){nav{padding:14px 20px;}.nav-links{display:none;}.page-header,.toolbar,.grid{padding-left:20px;padding-right:20px;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html" class="nav-logo">Jashwanth</a>
+  <div class="nav-links"><a href="dashboard.html">Dashboard</a><a href="products.html" class="active">Products</a><a href="cart.html">Cart</a><a href="contact.html">Contact</a></div>
+  <a href="cart.html" class="cart-btn">🛒 Cart (<span id="cartCount">0</span>)</a>
+</nav>
+<div class="page-header">
+  <div class="page-tag">Store</div>
+  <h1 class="page-title">All Products</h1>
+  <p class="page-sub">Browse, search and filter our test product catalogue</p>
+</div>
+<div class="toolbar">
+  <div class="search-wrap"><span class="si">🔍</span><input id="searchInput" type="text" placeholder="Search products..." oninput="filterProducts()"/></div>
+  <select id="sortSelect" onchange="filterProducts()"><option value="default">Sort: Default</option><option value="price-asc">Price: Low to High</option><option value="price-desc">Price: High to Low</option><option value="name-asc">Name: A–Z</option></select>
+  <button class="filter-btn active" onclick="setCategory('all',this)">All</button>
+  <button class="filter-btn" onclick="setCategory('electronics',this)">Electronics</button>
+  <button class="filter-btn" onclick="setCategory('clothing',this)">Clothing</button>
+  <button class="filter-btn" onclick="setCategory('books',this)">Books</button>
+</div>
+<div class="grid" id="productGrid"></div>
+<div class="toast" id="toast"></div>
+<div class="page-credit">Built by <span>Jashwanth</span></div>
+<script src="session.js"></script>
+<script>
+  const PRODUCTS=[
+    {id:1,name:'Wireless Headphones',category:'electronics',price:89.99,emoji:'🎧',desc:'Premium sound quality with noise cancellation.'},
+    {id:2,name:'Mechanical Keyboard',category:'electronics',price:129.99,emoji:'⌨️',desc:'Tactile switches, RGB backlight, full layout.'},
+    {id:3,name:'Smart Watch',category:'electronics',price:199.99,emoji:'⌚',desc:'Health tracking, GPS, 7-day battery life.'},
+    {id:4,name:'USB-C Hub',category:'electronics',price:49.99,emoji:'🔌',desc:'7-in-1 hub with HDMI, USB, SD card slots.'},
+    {id:5,name:'Running Shoes',category:'clothing',price:74.99,emoji:'👟',desc:'Lightweight, breathable mesh upper.'},
+    {id:6,name:'Hoodie',category:'clothing',price:54.99,emoji:'🧥',desc:'Soft fleece interior, relaxed fit.'},
+    {id:7,name:'Cap',category:'clothing',price:24.99,emoji:'🧢',desc:'Adjustable strap, embroidered logo.'},
+    {id:8,name:'Clean Code',category:'books',price:34.99,emoji:'📘',desc:'A handbook of agile software craftsmanship.'},
+    {id:9,name:'The Pragmatic Programmer',category:'books',price:39.99,emoji:'📗',desc:'Your journey to mastery.'},
+    {id:10,name:'Design Patterns',category:'books',price:44.99,emoji:'📙',desc:'Elements of reusable OO software.'},
+  ];
+  let currentCategory='all';
+  let cart=JSON.parse(sessionStorage.getItem('cart')||'[]');
+  updateCartCount();
+  function setCategory(cat,btn){currentCategory=cat;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterProducts();}
+  function filterProducts(){
+    const search=document.getElementById('searchInput').value.toLowerCase();
+    const sort=document.getElementById('sortSelect').value;
+    let list=PRODUCTS.filter(p=>(currentCategory==='all'||p.category===currentCategory)&&(p.name.toLowerCase().includes(search)||p.desc.toLowerCase().includes(search)));
+    if(sort==='price-asc')list.sort((a,b)=>a.price-b.price);
+    if(sort==='price-desc')list.sort((a,b)=>b.price-a.price);
+    if(sort==='name-asc')list.sort((a,b)=>a.name.localeCompare(b.name));
+    renderGrid(list);
+  }
+  function renderGrid(list){
+    const grid=document.getElementById('productGrid');
+    if(!list.length){grid.innerHTML='<div class="no-results">No products found.</div>';return;}
+    grid.innerHTML=list.map(p=>{const inCart=cart.find(c=>c.id===p.id);return`<div class="product-card" data-id="${p.id}" data-name="${p.name}" data-category="${p.category}"><div class="product-img">${p.emoji}</div><div class="product-body"><div class="product-category">${p.category}</div><div class="product-name">${p.name}</div><div class="product-desc">${p.desc}</div><div class="product-footer"><div class="product-price">$${p.price.toFixed(2)}</div><button class="add-btn${inCart?' added':''}" id="btn-${p.id}" onclick="addToCart(${p.id})">${inCart?'✓ Added':'Add to Cart'}</button></div></div></div>`;}).join('');
+  }
+  function addToCart(id){
+    const p=PRODUCTS.find(p=>p.id===id);const ex=cart.find(c=>c.id===id);
+    if(ex)ex.qty++;else cart.push({...p,qty:1});
+    sessionStorage.setItem('cart',JSON.stringify(cart));updateCartCount();
+    const btn=document.getElementById('btn-'+id);if(btn){btn.textContent='✓ Added';btn.classList.add('added');}
+    showToast('✓ '+p.name+' added to cart');
+  }
+  function updateCartCount(){document.getElementById('cartCount').textContent=cart.reduce((s,c)=>s+c.qty,0);}
+  function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.className='toast success show';setTimeout(()=>t.className='toast',2500);}
+  filterProducts();
+</script>
+</body>
+</html>

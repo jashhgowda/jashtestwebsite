@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — Jashwanth's Test Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0d; --panel: #141414; --border: #2a2a2a;
+      --accent: #c8f542; --accent-dim: #9ec42e;
+      --text: #f0ede6; --muted: #666; --error: #ff5c5c; --radius: 14px;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-weight: 300;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    body::before, body::after {
+      content: ''; position: fixed; border-radius: 50%;
+      filter: blur(120px); opacity: 0.13; pointer-events: none; z-index: 0;
+    }
+    body::before { width: 500px; height: 500px; background: var(--accent); top: -150px; left: -150px; }
+    body::after  { width: 400px; height: 400px; background: #4287f5; bottom: -100px; right: -100px; }
+    .container {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 540px; width: min(900px, 95vw);
+      border-radius: var(--radius); overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+      animation: fadeUp 0.6s ease both;
+    }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    .deco {
+      background: linear-gradient(145deg, #141a0e 0%, #0e1a1a 100%);
+      padding: 44px 40px; display: flex; flex-direction: column;
+      justify-content: space-between; position: relative; overflow: hidden;
+    }
+    .deco::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, #ffffff06 39px, #ffffff06 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, #ffffff06 39px, #ffffff06 40px);
+    }
+    .brand-block { display:flex; align-items:center; gap:12px; position:relative; z-index:1; }
+    .brand-avatar {
+      width:42px; height:42px; border-radius:10px;
+      background:var(--accent); color:#0d0d0d;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'DM Serif Display',serif; font-size:1rem; font-weight:700; flex-shrink:0;
+    }
+    .brand-name { font-family:'DM Serif Display',serif; font-size:1rem; color:var(--text); line-height:1.3; }
+    .brand-role { font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-top:2px; }
+    .deco-headline { font-family:'DM Serif Display',serif; font-size:clamp(2rem,4vw,2.8rem); line-height:1.15; position:relative; z-index:1; }
+    .deco-headline em { font-style:italic; color:var(--accent); }
+    .deco-footer { font-size:12px; color:var(--muted); line-height:1.7; position:relative; z-index:1; }
+    .deco-footer strong { color:var(--accent); font-weight:500; }
+    .form-panel { background:var(--panel); padding:48px 44px; display:flex; flex-direction:column; justify-content:center; }
+    .form-title { font-family:'DM Serif Display',serif; font-size:1.8rem; margin-bottom:6px; }
+    .form-subtitle { color:var(--muted); font-size:13px; margin-bottom:28px; }
+    .attempt-bar {
+      background:#1a1010; border:1px solid #3d1a1a; border-radius:8px;
+      padding:10px 14px; font-size:12px; color:#ff9090;
+      margin-bottom:16px; display:none; align-items:center; gap:8px;
+    }
+    .attempt-bar.show { display:flex; }
+    .field { margin-bottom:16px; }
+    label { display:block; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:7px; font-weight:500; }
+    input {
+      width:100%; background:#1c1c1c; border:1px solid var(--border);
+      border-radius:8px; color:var(--text); font-family:'DM Sans',sans-serif;
+      font-size:14px; padding:13px 16px; outline:none;
+      transition:border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(200,245,66,0.08); }
+    input.err { border-color:var(--error); box-shadow:0 0 0 3px rgba(255,92,92,0.08); }
+    input::placeholder { color:#3a3a3a; }
+    .field-err { font-size:11px; color:var(--error); margin-top:5px; display:none; }
+    .field-err.show { display:block; }
+    .row { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+    .remember { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); cursor:pointer; }
+    .remember input[type=checkbox] { width:16px; height:16px; accent-color:var(--accent); cursor:pointer; }
+    .forgot { font-size:13px; color:var(--accent); text-decoration:none; }
+    .btn {
+      width:100%; background:var(--accent); color:#0d0d0d; border:none; border-radius:8px;
+      font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; padding:14px; cursor:pointer;
+      letter-spacing:0.04em; transition:background 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+    .btn:hover { background:var(--accent-dim); box-shadow:0 4px 20px rgba(200,245,66,0.2); }
+    .btn:active { transform:scale(0.98); }
+    .btn:disabled { background:#252525; color:#555; cursor:not-allowed; box-shadow:none; transform:none; }
+    .hint { margin-top:16px; background:#1a1a1a; border:1px solid var(--border); border-radius:8px; padding:12px 16px; font-size:12px; color:var(--muted); line-height:1.9; }
+    .hint strong { color:var(--accent); font-weight:500; }
+    .signup { margin-top:16px; text-align:center; font-size:13px; color:var(--muted); }
+    .signup a { color:var(--accent); text-decoration:none; }
+    .toast {
+      position:fixed; bottom:28px; left:50%;
+      transform:translateX(-50%) translateY(20px);
+      background:#1e1e1e; border:1px solid var(--border);
+      border-radius:10px; padding:13px 24px; font-size:13px;
+      opacity:0; transition:opacity 0.3s, transform 0.3s;
+      pointer-events:none; z-index:999; white-space:nowrap;
+    }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    .toast.success { border-color:var(--accent); color:var(--accent); }
+    .toast.error   { border-color:var(--error); color:var(--error); }
+    .page-credit { position:fixed; bottom:14px; right:18px; font-size:11px; color:#2a2a2a; z-index:10; }
+    .page-credit span { color:var(--accent); }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+    @media (max-width:640px) { .container{grid-template-columns:1fr;} .deco{display:none;} .form-panel{padding:40px 28px;} }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="deco">
+    <div class="brand-block">
+      <div class="brand-avatar">JW</div>
+      <div>
+        <div class="brand-name">Jashwanth</div>
+        <div class="brand-role">QA Automation Engineer</div>
+      </div>
+    </div>
+    <div class="deco-headline">Simple.<br/><em>Secure.</em><br/>Sign in.</div>
+    <p class="deco-footer">Built by <strong>Jashwanth</strong> using HTML, CSS &amp; JavaScript.<br/>Automated with Playwright. No real data stored.</p>
+  </div>
+  <div class="form-panel">
+    <h1 class="form-title">Welcome back</h1>
+    <p class="form-subtitle">Sign in to your test account</p>
+    <div class="attempt-bar" id="attemptBar">⚠️ <span id="attemptMsg"></span></div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@example.com" autocomplete="email"/>
+      <div class="field-err" id="emailErr"></div>
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="••••••••" autocomplete="current-password"/>
+      <div class="field-err" id="passwordErr"></div>
+    </div>
+    <div class="row">
+      <label class="remember"><input type="checkbox" id="remember"/> Remember me</label>
+      <a href="#" class="forgot">Forgot password?</a>
+    </div>
+    <button class="btn" id="loginBtn" onclick="handleLogin()">Sign in →</button>
+    <div class="hint">
+      <strong>Test credentials:</strong><br/>
+      test@example.com &nbsp;/&nbsp; password123<br/>
+      admin@test.com &nbsp;/&nbsp; admin123
+    </div>
+    <p class="signup">Don't have an account? <a href="register.html">Sign up</a></p>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="page-credit">Built by <span>Jashwanth</span></div>
+<script>
+  const USERS = [
+    { email: 'test@example.com', password: 'password123', name: 'Jashwanth' },
+    { email: 'admin@test.com',   password: 'admin123',    name: 'Admin' },
+  ];
+  let attempts = 0;
+
+  function clearErrors() {
+    ['email','password'].forEach(id => {
+      document.getElementById(id).classList.remove('err');
+      document.getElementById(id+'Err').classList.remove('show');
+      document.getElementById(id+'Err').textContent = '';
+    });
+    document.getElementById('attemptBar').classList.remove('show');
+  }
+
+  function showErr(fieldId, msg) {
+    document.getElementById(fieldId).classList.add('err');
+    const el = document.getElementById(fieldId+'Err');
+    el.textContent = msg; el.classList.add('show');
+  }
+
+  function handleLogin() {
+    clearErrors();
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn      = document.getElementById('loginBtn');
+
+    let valid = true;
+    if (!email) { showErr('email','Email is required.'); valid = false; }
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('email','Enter a valid email address.'); valid = false; }
+    if (!password) { showErr('password','Password is required.'); valid = false; }
+    if (!valid) return;
+
+    const match = USERS.find(u => u.email === email && u.password === password);
+
+    if (match) {
+      attempts = 0;
+      btn.textContent = 'Signing in...';
+      btn.disabled = true;
+      showToast('✓ Login successful! Redirecting...', 'success');
+      sessionStorage.setItem('user', JSON.stringify({ name: match.name, email: match.email }));
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+    } else {
+      attempts++;
+      const emailExists = USERS.find(u => u.email === email);
+      if (!emailExists) { showErr('email','No account found with this email.'); }
+      else { showErr('password','Incorrect password. Please try again.'); }
+
+      if (attempts >= 2) {
+        const remaining = 5 - attempts;
+        const bar = document.getElementById('attemptBar');
+        const msg = document.getElementById('attemptMsg');
+        bar.classList.add('show');
+        if (remaining > 0) {
+          msg.textContent = 'Failed attempt ' + attempts + ' of 5. ' + remaining + ' remaining.';
+        } else {
+          msg.textContent = 'Too many failed attempts. Wait 30 seconds.';
+          btn.disabled = true; btn.textContent = 'Locked — wait 30s';
+          setTimeout(() => { btn.disabled=false; btn.textContent='Sign in →'; attempts=0; bar.classList.remove('show'); }, 30000);
+        }
+      }
+      document.querySelector('.form-panel').style.animation = 'none';
+      setTimeout(() => { document.querySelector('.form-panel').style.animation = 'shake 0.4s ease'; }, 10);
+    }
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast ' + type + ' show';
+    setTimeout(() => { t.className = 'toast'; }, 3000);
+  }
+</script>
+</body>
+</html>

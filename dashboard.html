@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Jashwanth's Test Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#0a0a0a;--card:#161616;--border:#222;--accent:#c8f542;--accent-dim:#9ec42e;--blue:#4287f5;--pink:#f542a7;--orange:#f5a142;--text:#f0ede6;--muted:#555;--radius:14px;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:1px solid var(--border);background:rgba(10,10,10,0.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;}
+    .nav-logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--accent);text-decoration:none;}
+    .nav-links{display:flex;gap:28px;}
+    .nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .nav-links a:hover,.nav-links a.active{color:var(--text);}
+    .nav-right{display:flex;align-items:center;gap:16px;}
+    .nav-user{font-size:13px;color:var(--muted);}
+    .nav-user span{color:var(--text);font-weight:500;}
+    .btn-logout{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:7px 16px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+    .btn-logout:hover{border-color:#ff5c5c;color:#ff5c5c;}
+    .hero{padding:56px 40px 36px;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;width:500px;height:500px;background:var(--accent);border-radius:50%;filter:blur(160px);opacity:0.05;top:-200px;right:-100px;pointer-events:none;}
+    .hero-tag{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:14px;animation:fadeUp 0.5s ease both;}
+    .hero-title{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.5rem);line-height:1.1;margin-bottom:14px;animation:fadeUp 0.5s 0.1s ease both;opacity:0;}
+    .hero-title em{font-style:italic;color:var(--accent);}
+    .hero-sub{font-size:14px;color:var(--muted);max-width:460px;line-height:1.7;animation:fadeUp 0.5s 0.2s ease both;opacity:0;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;padding:0 40px 36px;animation:fadeUp 0.5s 0.3s ease both;opacity:0;}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;transition:border-color 0.2s,transform 0.2s;}
+    .stat-card:hover{border-color:#2e2e2e;transform:translateY(-2px);}
+    .stat-label{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+    .stat-value{font-family:'DM Serif Display',serif;font-size:2rem;}
+    .stat-value.green{color:var(--accent);} .stat-value.blue{color:var(--blue);} .stat-value.pink{color:var(--pink);} .stat-value.orange{color:var(--orange);}
+    .stat-change{font-size:12px;color:var(--muted);margin-top:6px;}
+    .stat-change.up{color:var(--accent);} .stat-change.down{color:#ff5c5c;}
+    .main-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;padding:0 40px 36px;animation:fadeUp 0.5s 0.4s ease both;opacity:0;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;}
+    .card-title{font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;font-weight:500;}
+    .activity-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);}
+    .activity-item:last-child{border-bottom:none;}
+    .activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .activity-dot.green{background:var(--accent);} .activity-dot.blue{background:var(--blue);} .activity-dot.pink{background:var(--pink);} .activity-dot.orange{background:var(--orange);}
+    .activity-text{font-size:14px;flex:1;}
+    .activity-time{font-size:12px;color:var(--muted);}
+    .progress-item{margin-bottom:20px;}
+    .progress-header{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;}
+    .progress-pct{color:var(--muted);font-size:12px;}
+    .progress-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
+    .progress-fill{height:100%;border-radius:99px;}
+    .fill-green{background:var(--accent);} .fill-blue{background:var(--blue);} .fill-pink{background:var(--pink);} .fill-orange{background:var(--orange);}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 40px 60px;animation:fadeUp 0.5s 0.5s ease both;opacity:0;}
+    .action-btn{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:border-color 0.2s,transform 0.2s;text-align:left;font-family:'DM Sans',sans-serif;color:var(--text);}
+    .action-btn:hover{border-color:var(--accent);transform:translateY(-2px);}
+    .action-icon{font-size:1.5rem;margin-bottom:10px;}
+    .action-title{font-size:14px;font-weight:500;margin-bottom:4px;}
+    .action-desc{font-size:12px;color:var(--muted);}
+    .page-credit{position:fixed;bottom:14px;right:18px;font-size:11px;color:#2a2a2a;z-index:10;}
+    .page-credit span{color:var(--accent);}
+    @media(max-width:768px){nav{padding:14px 20px;}.nav-links{display:none;}.hero,.stats,.main-grid,.actions{padding-left:20px;padding-right:20px;}.main-grid{grid-template-columns:1fr;}.actions{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html" class="nav-logo">Jashwanth</a>
+  <div class="nav-links">
+    <a href="dashboard.html" class="active">Dashboard</a>
+    <a href="products.html">Products</a>
+    <a href="cart.html">Cart</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-user">Logged in as <span id="userName">User</span></div>
+    <button class="btn-logout" onclick="window.__doLogout('Manual logout')">Log out</button>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-tag">Dashboard</div>
+  <h1 class="hero-title">Good to see you,<br/><em id="heroName">there</em>.</h1>
+  <p class="hero-sub">Here's a snapshot of your test environment. Everything is running smoothly.</p>
+</section>
+<div class="stats">
+  <div class="stat-card"><div class="stat-label">Total Users</div><div class="stat-value green">1,284</div><div class="stat-change up">↑ 12% this week</div></div>
+  <div class="stat-card"><div class="stat-label">Active Sessions</div><div class="stat-value blue">38</div><div class="stat-change up">↑ 4 right now</div></div>
+  <div class="stat-card"><div class="stat-label">Tests Passed</div><div class="stat-value pink">97%</div><div class="stat-change up">↑ Great score</div></div>
+  <div class="stat-card"><div class="stat-label">Errors Today</div><div class="stat-value orange">3</div><div class="stat-change down">↓ Down from 11</div></div>
+</div>
+<div class="main-grid">
+  <div class="card">
+    <div class="card-title">Recent Activity</div>
+    <div class="activity-item"><div class="activity-dot green"></div><div class="activity-text">User <strong id="actUser">jash@test.com</strong> logged in</div><div class="activity-time">Just now</div></div>
+    <div class="activity-item"><div class="activity-dot blue"></div><div class="activity-text">New test session started on <strong>Chrome</strong></div><div class="activity-time">2m ago</div></div>
+    <div class="activity-item"><div class="activity-dot pink"></div><div class="activity-text">Password reset triggered for <strong>demo@test.com</strong></div><div class="activity-time">14m ago</div></div>
+    <div class="activity-item"><div class="activity-dot orange"></div><div class="activity-text">API rate limit warning on <strong>/auth</strong></div><div class="activity-time">1h ago</div></div>
+    <div class="activity-item"><div class="activity-dot green"></div><div class="activity-text">Deployment successful — <strong>v1.2.0</strong></div><div class="activity-time">3h ago</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">System Health</div>
+    <div class="progress-item"><div class="progress-header"><span>Server Uptime</span><span class="progress-pct">99%</span></div><div class="progress-bar"><div class="progress-fill fill-green" style="width:99%"></div></div></div>
+    <div class="progress-item"><div class="progress-header"><span>Memory Usage</span><span class="progress-pct">62%</span></div><div class="progress-bar"><div class="progress-fill fill-blue" style="width:62%"></div></div></div>
+    <div class="progress-item"><div class="progress-header"><span>Test Coverage</span><span class="progress-pct">84%</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:84%"></div></div></div>
+    <div class="progress-item"><div class="progress-header"><span>Disk Usage</span><span class="progress-pct">41%</span></div><div class="progress-bar"><div class="progress-fill fill-orange" style="width:41%"></div></div></div>
+  </div>
+</div>
+<div class="actions">
+  <button class="action-btn" onclick="alert('Profile settings coming soon!')"><div class="action-icon">👤</div><div class="action-title">Edit Profile</div><div class="action-desc">Update your account details</div></button>
+  <button class="action-btn" onclick="alert('Reports coming soon!')"><div class="action-icon">📊</div><div class="action-title">View Reports</div><div class="action-desc">Download test reports</div></button>
+  <button class="action-btn" onclick="alert('API settings coming soon!')"><div class="action-icon">🔑</div><div class="action-title">API Keys</div><div class="action-desc">Manage your API access</div></button>
+  <button class="action-btn" onclick="alert('Settings coming soon!')"><div class="action-icon">⚙️</div><div class="action-title">Settings</div><div class="action-desc">Configure your environment</div></button>
+</div>
+<div class="page-credit">Built by <span>Jashwanth</span></div>
+<script src="session.js"></script>
+<script>
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  document.getElementById('userName').textContent = user.email || 'User';
+  document.getElementById('heroName').textContent = user.name  || 'there';
+  document.getElementById('actUser').textContent  = user.email || 'jash@test.com';
+</script>
+</body>
+</html>

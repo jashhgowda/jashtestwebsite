@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 — Jashwanth's Test Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#0a0a0a;--border:#222;--accent:#c8f542;--text:#f0ede6;--muted:#555;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
+    body::before{content:'';position:fixed;width:600px;height:600px;background:var(--accent);border-radius:50%;filter:blur(180px);opacity:0.04;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+    .wrapper{position:relative;z-index:1;padding:40px;max-width:500px;animation:fadeUp 0.6s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .glitch{font-family:'DM Serif Display',serif;font-size:clamp(6rem,20vw,10rem);color:var(--accent);line-height:1;position:relative;display:inline-block;animation:glitch 2.5s infinite;}
+    @keyframes glitch{0%,90%,100%{text-shadow:none;transform:none;}92%{text-shadow:-4px 0 #ff5c5c,4px 0 #4287f5;transform:skewX(-1deg);}94%{text-shadow:4px 0 #ff5c5c,-4px 0 #4287f5;transform:skewX(1deg);}96%{text-shadow:none;transform:none;}}
+    .title{font-family:'DM Serif Display',serif;font-size:1.8rem;margin:16px 0 10px;}
+    .sub{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:36px;}
+    .links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .btn-home{background:var(--accent);color:#0d0d0d;border:none;border-radius:8px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+    .btn-home:hover{background:#9ec42e;}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;text-decoration:none;transition:border-color 0.2s;}
+    .btn-ghost:hover{border-color:#444;}
+    .countdown{margin-top:28px;font-size:12px;color:var(--muted);}
+    .countdown span{color:var(--accent);font-weight:500;}
+    .page-credit{position:fixed;bottom:14px;right:18px;font-size:11px;color:#2a2a2a;z-index:10;}.page-credit span{color:var(--accent);}
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="glitch">404</div>
+  <h1 class="title">Page Not Found</h1>
+  <p class="sub">Looks like this page wandered off into the void.<br/>Don't worry — it happens to the best of us.</p>
+  <div class="links">
+    <a href="index.html" class="btn-home">← Go Home</a>
+    <a href="products.html" class="btn-ghost">Browse Products</a>
+  </div>
+  <p class="countdown">Auto-redirecting in <span id="timer">10</span>s...</p>
+</div>
+<div class="page-credit">Built by <span>Jashwanth</span></div>
+<script>
+  let t=10;
+  const el=document.getElementById('timer');
+  const iv=setInterval(()=>{ t--; el.textContent=t; if(t<=0){clearInterval(iv);window.location.href='index.html';} },1000);
+</script>
+</body>
+</html>

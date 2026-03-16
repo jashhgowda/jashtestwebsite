@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — Jashwanth's Test Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#0d0d0d;--panel:#141414;--border:#2a2a2a;--accent:#c8f542;--accent-dim:#9ec42e;--text:#f0ede6;--muted:#666;--error:#ff5c5c;--radius:14px;}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+    body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(140px);opacity:0.1;pointer-events:none;z-index:0;}
+    body::before{width:500px;height:500px;background:#4287f5;top:-150px;right:-100px;}
+    body::after{width:400px;height:400px;background:var(--accent);bottom:-100px;left:-100px;}
+    .wrapper{position:relative;z-index:1;width:min(480px,95vw);background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:48px 44px;box-shadow:0 40px 80px rgba(0,0,0,0.5);animation:fadeUp 0.6s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .back{font-size:12px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:28px;transition:color 0.2s;}
+    .back:hover{color:var(--accent);}
+    .form-title{font-family:'DM Serif Display',serif;font-size:2rem;margin-bottom:6px;}
+    .form-subtitle{color:var(--muted);font-size:13px;margin-bottom:28px;}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .field{margin-bottom:16px;}
+    label{display:block;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-weight:500;}
+    input{width:100%;background:#1c1c1c;border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 14px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+    input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,245,66,0.08);}
+    input.err{border-color:var(--error);box-shadow:0 0 0 3px rgba(255,92,92,0.08);}
+    input::placeholder{color:#3a3a3a;}
+    .field-err{font-size:11px;color:var(--error);margin-top:5px;display:none;}
+    .field-err.show{display:block;}
+    .strength-bar{display:flex;gap:4px;margin-top:8px;}
+    .seg{flex:1;height:4px;border-radius:99px;background:var(--border);transition:background 0.3s;}
+    .terms{display:flex;align-items:flex-start;gap:10px;margin:18px 0 22px;font-size:13px;color:var(--muted);}
+    .terms input{width:16px;height:16px;margin-top:2px;accent-color:var(--accent);flex-shrink:0;}
+    .terms a{color:var(--accent);text-decoration:none;}
+    .btn{width:100%;background:var(--accent);color:#0d0d0d;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:14px;cursor:pointer;transition:background 0.2s,transform 0.1s;}
+    .btn:hover{background:var(--accent-dim);}
+    .btn:active{transform:scale(0.98);}
+    .login-link{text-align:center;font-size:13px;color:var(--muted);margin-top:18px;}
+    .login-link a{color:var(--accent);text-decoration:none;}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e1e1e;border:1px solid var(--border);border-radius:10px;padding:13px 24px;font-size:13px;opacity:0;transition:opacity 0.3s,transform 0.3s;pointer-events:none;z-index:999;white-space:nowrap;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .toast.success{border-color:var(--accent);color:var(--accent);}
+    .toast.error{border-color:var(--error);color:var(--error);}
+    .page-credit{position:fixed;bottom:14px;right:18px;font-size:11px;color:#2a2a2a;z-index:10;}
+    .page-credit span{color:var(--accent);}
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="index.html" class="back">← Back to Login</a>
+  <h1 class="form-title">Create account</h1>
+  <p class="form-subtitle">Join the Jashwanth test environment</p>
+  <div class="row2">
+    <div class="field"><label for="fn">First Name</label><input id="fn" type="text" placeholder="Jash"/><div class="field-err" id="fnErr">Required</div></div>
+    <div class="field"><label for="ln">Last Name</label><input id="ln" type="text" placeholder="Kumar"/><div class="field-err" id="lnErr">Required</div></div>
+  </div>
+  <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="you@example.com"/><div class="field-err" id="emailErr">Enter a valid email</div></div>
+  <div class="field">
+    <label for="pw">Password</label>
+    <input id="pw" type="password" placeholder="Min 8 characters" oninput="checkStrength(this.value)"/>
+    <div class="strength-bar"><div class="seg" id="s1"></div><div class="seg" id="s2"></div><div class="seg" id="s3"></div><div class="seg" id="s4"></div></div>
+    <div class="field-err" id="pwErr">Minimum 8 characters required</div>
+  </div>
+  <div class="field"><label for="cpw">Confirm Password</label><input id="cpw" type="password" placeholder="Repeat password"/><div class="field-err" id="cpwErr">Passwords do not match</div></div>
+  <div class="terms"><input type="checkbox" id="terms"/><label for="terms" style="text-transform:none;letter-spacing:0;font-size:13px;color:var(--muted);">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label></div>
+  <button class="btn" onclick="handleRegister()">Create Account →</button>
+  <p class="login-link">Already have an account? <a href="index.html">Sign in</a></p>
+</div>
+<div class="toast" id="toast"></div>
+<div class="page-credit">Built by <span>Jashwanth</span></div>
+<script>
+  function checkStrength(v) {
+    const cols = ['#ff5c5c','#f5a142','#4287f5','#c8f542'];
+    let s = 0;
+    if(v.length>=8)s++; if(/[A-Z]/.test(v))s++; if(/[0-9]/.test(v))s++; if(/[^A-Za-z0-9]/.test(v))s++;
+    [1,2,3,4].forEach(i=>{ document.getElementById('s'+i).style.background = i<=s?cols[s-1]:'var(--border)'; });
+  }
+  function setErr(id,show,msg){
+    const inp=document.getElementById(id); const err=document.getElementById(id+'Err');
+    inp.classList.toggle('err',show); if(msg)err.textContent=msg;
+    err.classList.toggle('show',show);
+  }
+  function handleRegister(){
+    const fn=document.getElementById('fn').value.trim();
+    const ln=document.getElementById('ln').value.trim();
+    const em=document.getElementById('email').value.trim();
+    const pw=document.getElementById('pw').value;
+    const cpw=document.getElementById('cpw').value;
+    const terms=document.getElementById('terms').checked;
+    const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+    let valid=true;
+    setErr('fn',!fn,'First name is required.'); if(!fn)valid=false;
+    setErr('ln',!ln,'Last name is required.'); if(!ln)valid=false;
+    setErr('email',!emailOk,'Enter a valid email address.'); if(!emailOk)valid=false;
+    setErr('pw',pw.length<8,'Password must be at least 8 characters.'); if(pw.length<8)valid=false;
+    setErr('cpw',pw!==cpw,'Passwords do not match.'); if(pw!==cpw)valid=false;
+    if(!terms){showToast('Please accept the terms to continue.','error');return;}
+    if(!valid)return;
+    showToast('✓ Account created! Redirecting to login...','success');
+    setTimeout(()=>window.location.href='index.html',1400);
+  }
+  function showToast(msg,type){
+    const t=document.getElementById('toast');
+    t.textContent=msg;t.className='toast '+type+' show';
+    setTimeout(()=>t.className='toast',3000);
+  }
+</script>
+</body>
+</html>
