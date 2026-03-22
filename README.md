@@ -1,32 +1,36 @@
-# 🧪 JashTest Website — Playwright Automation Framework
+# JashwanthTestWebsite — Web App & Playwright Automation Framework
 
-A multi-page web application built from scratch using **HTML, CSS and JavaScript**, paired with a complete **Playwright end-to-end test automation framework**.
-
-> Built to demonstrate full-stack testing skills — from building the application to automating it.
+A multi-page web application built from scratch using HTML, CSS and JavaScript, paired with a complete Playwright end-to-end test automation framework.
 
 ---
 
-## 🌐 Live Website
+## Live Website
 
-👉 **[https://yourusername.github.io/jashtestwebsite](https://yourusername.github.io/jashtestwebsite)**
+https://jashhgowda.github.io/jashtestwebsite
 
 ---
 
-## 📄 Pages Covered
+## About the Project
+
+This project was built to demonstrate full-stack testing skills — from designing and developing a web application to automating it with Playwright. The website simulates a real-world application with user authentication, a product catalogue, shopping cart, and contact form.
+
+---
+
+## Pages
 
 | Page | URL | Description |
 |---|---|---|
-| Login | `/index.html` | Login with validation and redirect |
-| Register | `/register.html` | Registration with password strength meter |
-| Dashboard | `/dashboard.html` | Landing page after login with stats |
-| Products | `/products.html` | Product listing with search, filter, sort |
-| Cart | `/cart.html` | Cart with qty update, remove, checkout |
-| Contact | `/contact.html` | Contact form with validation |
-| 404 | `/404.html` | Error page with auto-redirect |
+| Login | /index.html | Login with validation, attempt tracking and error handling |
+| Register | /register.html | Registration form with password strength meter |
+| Dashboard | /dashboard.html | Post-login landing page with stats and activity feed |
+| Products | /products.html | Product listing with search, filter and sort |
+| Cart | /cart.html | Shopping cart with quantity update and checkout |
+| Contact | /contact.html | Contact form with field validation |
+| 404 | /404.html | Custom error page with auto redirect |
 
 ---
 
-## 🔐 Test Credentials
+## Test Credentials
 
 | Email | Password |
 |---|---|
@@ -35,64 +39,77 @@ A multi-page web application built from scratch using **HTML, CSS and JavaScript
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 jashtestwebsite/
 │
-├── index.html               ← Login page
-├── register.html            ← Registration page
-├── dashboard.html           ← Dashboard (post-login)
-├── products.html            ← Product listing
-├── cart.html                ← Shopping cart
-├── contact.html             ← Contact form
-├── 404.html                 ← Error page
+├── index.html
+├── register.html
+├── dashboard.html
+├── products.html
+├── cart.html
+├── contact.html
+├── logout.html
+├── 404.html
+├── session.js
 │
-├── playwright.config.js     ← Playwright configuration
-├── package.json             ← Dependencies
-├── README.md                ← You are here
+├── playwright.config.js
+├── package.json
+├── README.md
 │
 └── tests/
-    ├── login.spec.js        ← Login test cases
-    ├── register.spec.js     ← Registration test cases
-    ├── products.spec.js     ← Products test cases
-    ├── cart.spec.js         ← Cart test cases
-    └── contact.spec.js      ← Contact form test cases
+    ├── helpers.js
+    ├── login.spec.js
+    ├── products.spec.js
+    ├── cart.spec.js
+    └── contact.spec.js
 ```
 
 ---
 
-## ⚙️ Prerequisites
+## Test Coverage
 
-Make sure you have the following installed:
+| Test File | Scenarios Covered |
+|---|---|
+| login.spec.js | Page load, valid login, wrong password, wrong email, empty fields |
+| products.spec.js | Page load, search, category filter, sort by price, add to cart |
+| cart.spec.js | Page load, empty cart, add product, increase quantity, remove item, total price, checkout |
+| contact.spec.js | Page load, empty form errors, invalid email, missing subject, successful submission |
 
-- [Node.js](https://nodejs.org/) (v16 or above)
-- [Git](https://git-scm.com/)
+Total: 44 tests passing across Chrome and Safari.
 
 ---
 
-## 🚀 Getting Started
+## Prerequisites
 
-### 1. Clone the Repository
+- Node.js v16 or above
+- Git
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/jashtestwebsite.git
+git clone https://github.com/jashhgowda/jashtestwebsite.git
 cd jashtestwebsite
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Install Playwright Browsers
+### 3. Install Playwright browsers
 
 ```bash
 npx playwright install
 ```
 
-### 4. Run All Tests
+### 4. Run all tests
 
 ```bash
 npx playwright test
@@ -100,29 +117,26 @@ npx playwright test
 
 ---
 
-## 🧪 Running Specific Tests
+## Running Specific Tests
 
 ```bash
 # Run only login tests
 npx playwright test tests/login.spec.js
 
-# Run only products tests
-npx playwright test tests/products.spec.js
+# Run only cart tests
+npx playwright test tests/cart.spec.js
 
-# Run tests in headed mode (watch browser)
+# Run in headed mode to watch the browser
 npx playwright test --headed
 
-# Run tests in a specific browser
+# Run on a specific browser
 npx playwright test --project=chromium
-npx playwright test --project=firefox
 npx playwright test --project=webkit
 ```
 
 ---
 
-## 📊 View Test Report
-
-After running tests, open the HTML report:
+## View Test Report
 
 ```bash
 npx playwright show-report
@@ -130,59 +144,32 @@ npx playwright show-report
 
 ---
 
-## ✅ Test Scenarios Covered
+## Key Features Implemented
 
-### Login (`login.spec.js`)
-- Valid login redirects to dashboard
-- Invalid password shows error message
-- Empty fields shows validation
-- Logout redirects back to login
-
-### Register (`register.spec.js`)
-- Empty form shows all field errors
-- Invalid email format shows error
-- Password mismatch shows error
-- Password shorter than 8 chars shows error
-- Valid registration redirects to login
-
-### Products (`products.spec.js`)
-- All products load on page
-- Search filters results correctly
-- Category filter works
-- Sort by price low to high
-- Sort by name A–Z
-- Add to cart updates cart count
-
-### Cart (`cart.spec.js`)
-- Cart shows added items
-- Increase quantity updates total
-- Decrease quantity updates total
-- Remove item clears it from cart
-- Empty cart shows empty state
-- Checkout clears the cart
-
-### Contact (`contact.spec.js`)
-- Empty form shows all errors
-- Invalid email shows error
-- Missing subject shows error
-- Valid submission shows success message
+- Session management with 20-minute inactivity timeout
+- Warning modal before auto logout
+- Dedicated logout page with session summary
+- Login attempt tracking with lockout after 5 failed attempts
+- Reusable login helper function used across all test files
+- Cross-browser testing on Chrome and Safari
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
 | Frontend | HTML5, CSS3, Vanilla JavaScript |
 | Testing | Playwright |
 | Hosting | GitHub Pages |
-| Version Control | Git & GitHub |
+| Version Control | Git and GitHub |
 
 ---
 
-## 👨‍💻 Author
+## Author
 
-**Jash** — built for interview portfolio and Playwright automation practice.
+Jashwanth — QA Automation Engineer
 
-- GitHub: [github.com/yourusername](https://github.com/yourusername)
-- Live Site: [yourusername.github.io/jashtestwebsite](https://yourusername.github.io/jashtestwebsite)
+- GitHub: https://github.com/jashhgowda
+- Live Site: https://jashhgowda.github.io/jashtestwebsite
+- LinkedIn: https://linkedin.com/in/jashwanth-h-374053175
