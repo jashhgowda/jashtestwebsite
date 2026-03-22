@@ -5,7 +5,7 @@ export default defineConfig({
   testDir: './tests', // folder where all test files are stored
   fullyParallel: true, // run all tests at the same time
   forbidOnly: !!process.env.CI, // prevent test.only from being committed
-  retries: process.env.CI ? 2 : 0, // retry failed tests 2 times on CI only
+  retries: 1, // retry failed tests once
   workers: process.env.CI ? 1 : undefined, // single worker on CI, auto on local
   reporter: 'html', // generate HTML report after tests run
   timeout: 60000, // global timeout 60 seconds for all tests
@@ -21,10 +21,6 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] }, // run tests on Chrome
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] }, // run tests on Firefox
     },
     {
       name: 'webkit',

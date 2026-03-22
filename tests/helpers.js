@@ -1,5 +1,3 @@
-// helper functions shared across all test files
-
 async function login(page) {
   await page.goto('/jashtestwebsite/'); // open login page
   await page.waitForSelector('#email', { state: 'visible' }); // wait for email field to be visible
