@@ -10,7 +10,7 @@ test.describe('Login Page', () => { // group all login tests together
   test('should login successfully with valid credentials', async ({ page }) => { // second test case
     await page.goto('/jashtestwebsite/'); // open login page
     await page.fill('#email', 'test@example.com'); // type email into email field
-    await page.fill('#password', 'password123'); // type password into password field
+   await page.fill('#password', 'password123'); // type password into password field
     await page.click('#loginBtn'); // click the sign in button
     await expect(page).toHaveURL(/dashboard/); // check URL changed to dashboard
   });
