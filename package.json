@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npx http-server . -p 4173 -c-1",
     "test": "playwright test",
-    "test:headed": "playwright test --headed"
+    "test:headed": "playwright test --headed",
+    "allure": "npx allure generate allure-results --clean && npx allure open allure-report"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,8 @@
   "homepage": "https://github.com/jashhgowda/jashtestwebsite#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
-    "@types/node": "^25.5.0"
+    "@types/node": "^25.5.0",
+    "allure-commandline": "^2.38.1",
+    "allure-playwright": "^3.6.0"
   }
 }

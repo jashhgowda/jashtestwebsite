@@ -9,8 +9,9 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined, // single worker on CI, auto on local
   
   reporter: [
-    ['html', { open: 'on-failure' }], // generate HTML report, open on failure
-    ['list'], // show test results in terminal as they run
+    ['html', { open: 'on-failure' }], // playwright HTML report
+    ['list'], // show results in terminal
+    ['allure-playwright'], // allure report
   ],
 
   timeout: 60000, // global timeout 60 seconds per test
