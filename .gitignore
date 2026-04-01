@@ -1,8 +1,12 @@
+# Environment files
+.env
+.env.staging
 
-# Playwright
+# Playwright report files
+allure-results/
+allure-report/
+playwright-report/
+test-results/
+
+# Node modules
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
